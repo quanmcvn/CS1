@@ -20,6 +20,9 @@ const stats = {
 	requests: 0,
 	successes: 0,
 	errors: 0,
+	results: {
+
+	},
 	durations: [],
 	statusCodes: {},
 	startTime: 0,
@@ -144,9 +147,15 @@ function printResults() {
 
 	// Calculate percentiles
 	stats.durations.sort((a, b) => a - b);
+	const average = (stats.durations.reduce((a, b) => a + b, 0) / stats.durations.length);
 	const p50 = stats.durations[Math.floor(stats.durations.length * 0.5)];
 	const p90 = stats.durations[Math.floor(stats.durations.length * 0.9)];
 	const p99 = stats.durations[Math.floor(stats.durations.length * 0.99)];
+
+	stats.results['average'] = average;
+	stats.results['p50'] = p50;
+	stats.results['p90'] = p90;
+	stats.results['p99'] = p99;
 
 	console.log('\n=== Redirect Test Results ===');
 	console.log(`Total requests: ${stats.requests}`);
@@ -161,7 +170,7 @@ function printResults() {
 	});
 
 	console.log('\nResponse times (ms):');
-	console.log(`Average: ${(stats.durations.reduce((a, b) => a + b, 0) / stats.durations.length).toFixed(2)}`);
+	console.log(`Average: ${average.toFixed(2)}`);
 	console.log(`p50: ${p50.toFixed(2)}`);
 	console.log(`p90: ${p90.toFixed(2)}`);
 	console.log(`p99: ${p99.toFixed(2)}`);

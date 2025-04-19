@@ -2,9 +2,9 @@ import Memcached from 'memcached'
 import dotenv from "dotenv";
 
 dotenv.config();
-const memcached_url = process.env.MEMCACHED_URL;
+const memcached_port = process.env.MEMCACHED_PORT;
 
-const memcached = new Memcached(memcached_url);
+const memcached = new Memcached(`localhost:${memcached_port}`);
 
 function cache_get(key) {
 	let ret = null;

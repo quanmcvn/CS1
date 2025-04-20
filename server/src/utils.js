@@ -21,15 +21,6 @@ async function get_new_id() {
 	throw new Error(`whar, (total/62^5)^${attemptSize} chance to collide all ${attemptSize} attemps and still collide`);
 }
 
-function validate_url(req, res, next) {
-	const url = req.query.url;
-	const regex = /^(http|https):\/\/[^ "]+$/;
-	if (!url || !regex.test(url)) {
-		return res.status(400).send("Invalid URL format");
-	}
-	next();
-}
-
 async function create_short_url(url) {
 	const id = await get_new_id();
 

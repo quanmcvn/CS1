@@ -8,7 +8,7 @@ const app = express()
 const port = 6968
 
 app.use(cors())
-// app.use(rate_limitter)
+app.use(rate_limitter)
 
 app.get('/short/:id', async (req, res) => {
 	try {

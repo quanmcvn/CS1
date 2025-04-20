@@ -22,7 +22,7 @@ const rate_limit = (options) => {
 			next();
 			return;
 		}
-		res.status(429).send(`Too many requests, only ${max_request} per ${window_ms}`);
+		res.status(429).send(`Too many requests, only ${max_request} per ${window_ms}ms`);
 		return;
 	};
 };

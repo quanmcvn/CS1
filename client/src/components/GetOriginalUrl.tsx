@@ -24,7 +24,7 @@ export default function GetOriginalUrl() {
 			setOriginalUrl(url);
 			// window.open(originalUrl, "_blank");
 		} catch (err: any) {
-			setError(err.message);
+			setError(err);
 			setOriginalUrl("");
 		}
 	};

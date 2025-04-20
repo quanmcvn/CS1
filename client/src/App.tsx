@@ -1,15 +1,27 @@
 import Home from "@pages/Home";
+import Redirect from "@pages/Redirect";
 import NotFound from "@pages/NotFound";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import "./App.css"
+
+const router = createBrowserRouter([
+	{
+		path: '/',
+		element: <Home />,
+	},
+	{
+		path: '/not-found',
+		element: <NotFound />,
+	},
+	{
+		path: '/:id',
+		element: <Redirect />,
+	},
+]);
+
 
 export default function App() {
 	return (
-		<Router>
-			<Routes>
-				<Route path="/" element={<Home />} />
-				<Route path="*" element={<NotFound />} />
-			</Routes>
-		</Router>
+		<RouterProvider router={router} />
 	)
 }

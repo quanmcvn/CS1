@@ -9,6 +9,11 @@ function make_id(length) {
 	).join("");
 }
 
+function validate_url(url) {
+	const regex = /(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&\/\/=]*)/;
+	return regex.test(url);
+}
+
 async function get_new_id() {
 	const attemptSize = 10;
 	for (let attempt = 0; attempt < attemptSize; attempt++) {
@@ -22,6 +27,10 @@ async function get_new_id() {
 }
 
 async function create_short_url(url) {
+	if (!validate_url(url)) {
+		throw `Not an appropiate URL: ${url}`;
+	}
+
 	const id = await get_new_id();
 
 	const newUrl = new Urls({
@@ -31,12 +40,11 @@ async function create_short_url(url) {
 
 	return newUrl.save()
 		.then((url_obj) => {
-			if (url_obj === null) return null;
+			if (url_obj === null) throw "idk can't 1";
 			return id;
 		})
 		.catch((err) => {
-			console.error('Error saving URL:', err);
-			return null;
+			throw 'Error saving URL:' + err;
 		});
 }
 

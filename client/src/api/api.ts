@@ -10,12 +10,22 @@ const axiosInstance = axios.create({
 export const createShortUrlApi = async (
 	url: string
 ): Promise<string> => {
-	const response = await axiosInstance.post(`/create?url="${url}"`);
-	return response.data;
+	const response = await axiosInstance.post(`/create?url="${url}"`, {
+		validateStatus: null
+	});
+	if (200 <= response.status && response.status < 300) {
+		return response.data;
+	}
+	throw response.data;
 };
 
 export const getOriginalUrlApi = async (shortId: string): Promise<string> => {
 	if (shortId.includes(' ')) return "";
-	const response = await axiosInstance.get(`/short/${shortId}`);
-	return response.data;
+	const response = await axiosInstance.get(`/short/${shortId}`, {
+		validateStatus: null
+	});
+	if (response.status === 200) {
+		return response.data;
+	}
+	throw response.data;
 };

@@ -7,16 +7,14 @@ export default function CreateShortUrl() {
 	const [error, setError] = useState("");
 
 	const handleCreateShortUrl = async () => {
-		console.log(url);
 		try {
 			const response = await createShortUrl(encodeURIComponent(url))
-			console.log(response);
 			setShortId(`${response}`);
 			setError("")
 		} catch (error: any) {
 			console.error("Error creating short URL:", error);
 			setShortId("");
-			setError(error.message)
+			setError(error.response.data)
 		}
 	};
 

@@ -18,34 +18,34 @@ app.get('/short/:id', async (req, res) => {
 			url = await get_url(id);
 		}
 		if (url === null) {
-			res.status(404).json(null);
+			res.status(404).send("Short Id not found");
 		} else {
-			res.status(200).json(url);
+			res.status(200).send(url);
 		}
 	} catch (err) {
-		res.send(err)
+		res.status(404).send(err);
 	}
 })
 
 app.post('/create', async (req, res) => {
 	try {
 		const url = req.query.url;
-
 		const existing_id = await get_id(url);
-		let id;
 		if (existing_id) {
-			id = existing_id;
-		} else {
-			id = await create_short_url(url);
+			res.status(200).send(existing_id);
+			return;
 		}
+		let id = await create_short_url(url);
 		if (id === null) {
-			res.status(400).json("idk can't create_short_url");
-		} else {
-			cache_set(id, url);
-			res.status(201).json(id);
+			res.status(400).send("idk can't create_short_url");
+			return;
 		}
+		cache_set(id, url);
+		res.status(201).send(id);
+		return;
 	} catch (err) {
-		res.send(err);
+		res.status(400).send(err);
+		return;
 	}
 });
 

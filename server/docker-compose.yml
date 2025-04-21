@@ -1,0 +1,74 @@
+version: '3.8'
+
+services:
+  mongo1:
+    image: mongo:6
+    container_name: mongo1
+    ports:
+      - "27017:27017"
+    command: ["--replSet", "rs0", "--quiet"]
+    networks:
+      - mongo-net
+
+  mongo2:
+    image: mongo:6
+    container_name: mongo2
+    ports:
+      - "27018:27017"
+    command: ["--replSet", "rs0", "--quiet"]
+    networks:
+      - mongo-net
+
+  mongo3:
+    image: mongo:6
+    container_name: mongo3
+    ports:
+      - "27019:27017"
+    command: ["--replSet", "rs0", "--quiet"]
+    networks:
+      - mongo-net
+
+  mongo-setup:
+    image: mongo:6
+    container_name: mongo-setup
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+    networks:
+      - mongo-net
+    entrypoint: [ "sh", "-c", "
+      sleep 5 &&
+      mongosh --host mongo1 --eval '
+        rs.initiate({
+          _id: \"rs0\",
+          members: [
+            { _id: 0, host: \"mongo1:27017\" },
+            { _id: 1, host: \"mongo2:27017\" },
+            { _id: 2, host: \"mongo3:27017\" }
+          ]
+        })
+      ';
+      exit 0;
+    "]
+
+  app:
+    build: .
+    container_name: node-app
+    ports:
+      - "6968:6968"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - mongo1
+      - mongo2
+      - mongo3
+      - mongo-setup
+    environment:
+      - MONGODB_URI=mongodb://root:root@mongo1:27017,mongo2:27017,mongo3:27017/shorturl?replicaSet=rs0&authSource=admin
+    networks:
+      - mongo-net
+
+networks:
+  mongo-net:

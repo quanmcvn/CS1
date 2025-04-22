@@ -8,7 +8,7 @@ import { setTimeout } from 'timers/promises';
 const CONFIG = {
 	BASE_URL: 'http://localhost:6968',
 	CONCURRENCY: 1,               // Parallel requests
-	TOTAL_REQUESTS: 10,          // Total requests to make
+	TOTAL_REQUESTS: 1000,          // Total requests to make
 	TEST_DURATION: 0,             
 	ERROR_THRESHOLD: 0.05,         
 	REQUEST_TIMEOUT: 5000,         // ms

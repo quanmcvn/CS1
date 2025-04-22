@@ -40,7 +40,7 @@ app.post('/create', async (req, res) => {
 			res.status(400).send("idk can't create_short_url");
 			return;
 		}
-		// cache_set(id, url);
+		cache_set(id, url);
 		res.status(201).send(id);
 		return;
 	} catch (err) {

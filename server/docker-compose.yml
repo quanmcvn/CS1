@@ -9,7 +9,8 @@ services:
     command: ["--replSet", "rs0", "--quiet"]
     networks:
       - mongo-net
-
+    mem_limit: 512m         # Limit RAM to 512MB
+    cpus: 1           # Use max 0.5 CPU core
   mongo2:
     image: mongo:6
     container_name: mongo2
@@ -18,6 +19,8 @@ services:
     command: ["--replSet", "rs0", "--quiet"]
     networks:
       - mongo-net
+    mem_limit: 512m         # Limit RAM to 512MB
+    cpus: 1              # Use max 0.5 CPU core
 
   mongo3:
     image: mongo:6
@@ -27,6 +30,8 @@ services:
     command: ["--replSet", "rs0", "--quiet"]
     networks:
       - mongo-net
+    mem_limit: 512m         # Limit RAM to 512MB
+    cpus: 1              # Use max 0.5 CPU core
 
   mongo-setup:
     image: mongo:6
@@ -66,7 +71,7 @@ services:
       - mongo3
       - mongo-setup
     environment:
-      - MONGODB_URI=mongodb://root:root@mongo1:27017,mongo2:27017,mongo3:27017/shorturl?replicaSet=rs0&authSource=admin
+      - MONGODB_URI=mongodb://root:root@mongo1:27017,mongo2:27017,mongo3:27017/shorturl?replicaSet=rs0&authSource=admin&readPreference=secondaryPreferred
     networks:
       - mongo-net
 

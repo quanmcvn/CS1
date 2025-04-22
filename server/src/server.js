@@ -13,7 +13,7 @@ app.use(rate_limitter)
 app.get('/short/:id', async (req, res) => {
 	try {
 		const id = req.params.id;
-		let url = null; //cache_get(id);
+		let url = cache_get(id);
 		if (url === null) {
 			url = await get_url(id);
 		}
@@ -40,7 +40,7 @@ app.post('/create', async (req, res) => {
 			res.status(400).send("idk can't create_short_url");
 			return;
 		}
-		// cache_set(id, url);
+		cache_set(id, url);
 		res.status(201).send(id);
 		return;
 	} catch (err) {
